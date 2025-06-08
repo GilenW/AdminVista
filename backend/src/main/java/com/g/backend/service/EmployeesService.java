@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class EmployeesService {
 
     @Resource
     private EmployeesMapper employeesMapper;
+
+
 
     public List<Employees> selectAllEmployees() {
 
@@ -29,5 +32,17 @@ public class EmployeesService {
         PageHelper.startPage(pageNum, pageSize);
         List<Employees> employeesList = employeesMapper.selectAllEmployees();
         return PageInfo.of(employeesList);
+    }
+
+    public void add(Employees employees) {
+        employeesMapper.insert(employees);
+    }
+
+    public void update(Employees employees) {
+        employeesMapper.update(employees);
+    }
+
+    public void deleteById(Integer id) {
+        employeesMapper.deleteById(id);
     }
 }

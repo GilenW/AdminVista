@@ -16,6 +16,24 @@ public class EmployeesController {
     @Resource
     private EmployeesService employeesService;
 
+    @PostMapping("/add")
+    public Result add(@RequestBody Employees employees) {
+        employeesService.add(employees);
+        return Result.success();
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody Employees employees) {
+        employeesService.update(employees);
+        return Result.success();
+    }
+
+    @DeleteMapping("/deleteById/{id}")
+    public Result deleteById(@PathVariable Integer id) {
+        employeesService.deleteById(id);
+        return Result.success();
+    }
+
     @GetMapping("/selectAllEmployees")
     public Result selectAll() {
         List<Employees> employeesList =  employeesService.selectAllEmployees();
