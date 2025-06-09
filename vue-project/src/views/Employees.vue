@@ -28,7 +28,7 @@
         <el-table :data="data.tableData" stripe>
           <el-table-column prop="name" label="Name" width="180" />
           <el-table-column prop="age" label="Age" width="180" />
-          <el-table-column prop="position" label="Position" />
+          <el-table-column prop="position" label="Position" show-overflow-tooltip />
         </el-table>
       </el-card>
       <div style="margin-top: 10px">
@@ -85,4 +85,5 @@ const loadEmployees = () => {
   })
 }
 loadEmployees()
+
 </script>
