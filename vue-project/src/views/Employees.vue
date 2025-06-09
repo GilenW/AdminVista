@@ -15,7 +15,7 @@
 
     <div>
       <el-card>
-        <el-button type="primary">NEW</el-button>
+        <el-button type="primary" @click="loadForm">NEW</el-button>
         <el-button type="warning">MULTIPLE DELETE</el-button>
         <el-button type="primary">IMPORT</el-button>
         <el-button type="success">EXPORT</el-button>
@@ -42,12 +42,36 @@
         />
       </div>
     </div>
+
+    <el-dialog v-model="data.formVisible" title="Add new employee" width="500">
+      <el-form :model="data.form" style="margin-right: 50px">
+        <el-form-item label="Name" label-width="80px">
+          <el-input v-model="data.form.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="Age" label-width="80px">
+          <el-input-number :min="18" v-model="data.form.age"
+                           autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="Position" label-width="80px">
+          <el-input v-model="data.form.position" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="data.formVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="saveEmployees">
+            Confirm
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { computed, reactive } from 'vue'
 import request from '@/utils/request.js'
+import { ElMessage } from 'element-plus'
 
 const data = reactive({
   searchName: null,
@@ -59,17 +83,13 @@ const data = reactive({
   },
   dialogTableVisible: false,
   editRow: null,
-})
-const handleSizeChange = (value) => {
-  data.tableProperty.size = value
-}
-const handleCurrentChange = (value) => {
-  data.tableProperty.currentPage = value
-}
-const paginatedData = computed(() => {
-  const start = (data.tableProperty.currentPage - 1) * data.tableProperty.pageSize
-  const end = start + data.tableProperty.pageSize
-  return data.tableData.slice(start, end)
+  formVisible:false,
+  form:{
+    name:null,
+    age: null,
+    position: null,
+
+  }
 })
 
 const loadEmployees = () => {
@@ -90,5 +110,22 @@ loadEmployees()
 const reset = () =>{
   data.searchName = null
   loadEmployees()
+}
+
+const loadForm = () => {
+  data.formVisible = true
+  data.form = {}
+}
+
+const saveEmployees = () => {
+  request.post('/employees/add', data.form).then((res) => {
+    if(res.code == '200'){
+      ElMessage.success("Successfully added!")
+      data.formVisible = false
+      loadEmployees()
+    }else{
+      ElMessage.error(res.msg)
+    }
+  })
 }
 </script>

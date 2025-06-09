@@ -8,6 +8,7 @@
         select * from employees <where>
         <if test="name != null">name like concat('%',#{name},'%')</if>
     </where>
+        order by id desc
     </select>
 
     <select id="insert" parameterType="com.g.backend.entity.Employees" >
