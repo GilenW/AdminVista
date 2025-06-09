@@ -5,10 +5,15 @@ import ElementPlusPractice from '@/views/ElementPlusPractice.vue'
 import RouterVuePractice from '@/views/RouterVuePractice.vue'
 import Manager from '@/views/Manager.vue'
 import Analysis from '@/views/Analysis.vue'
+import Employees from '@/views/Employees.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/',
+      redirect: '/manager/home',
+    },
     {
       path: '/manager',
       name: 'Manager Page',
@@ -18,6 +23,14 @@ const router = createRouter({
       },
       children: [
         {
+          path: 'home',
+          name: 'home',
+          component: TodoList,
+          meta: {
+            title: 'Home Page',
+          },
+        },
+        {
           path: 'analysis',
           name: 'analysis',
           component: Analysis,
@@ -26,13 +39,14 @@ const router = createRouter({
           },
         },
         {
-          path: 'home',
-          name: 'home',
-          component: TodoList,
+          path: 'employees',
+          name: 'employees',
+          component: Employees,
           meta: {
-            title: 'Home Page',
+            title: 'Employees',
           },
         },
+
       ],
     },
 

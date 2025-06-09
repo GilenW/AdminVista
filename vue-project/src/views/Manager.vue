@@ -35,10 +35,10 @@
             <span>User Management</span>
           </template>
           <el-menu-item>Admin </el-menu-item>
-          <el-menu-item>Member </el-menu-item>
+          <el-menu-item index="/manager/employees">Employees </el-menu-item>
         </el-sub-menu>
 
-        <el-menu-item>
+        <el-menu-item index="/manager/person">
           <el-icon><UserFilled /></el-icon>
           Account
         </el-menu-item>
@@ -67,6 +67,7 @@ import {
   User,
   UserFilled,
 } from '@element-plus/icons-vue'
+import request from '@/utils/request.js'
 </script>
 
 <style scoped>

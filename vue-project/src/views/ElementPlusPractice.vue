@@ -151,6 +151,7 @@
 import { Edit, Delete, View, Search } from '@element-plus/icons-vue'
 import { computed, reactive } from 'vue'
 import router from '@/router/index.js'
+import request from '@/utils/request.js'
 
 const luckIncrease = () => {
   alert('Lucky+1')
