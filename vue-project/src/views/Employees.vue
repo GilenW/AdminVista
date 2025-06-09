@@ -4,12 +4,12 @@
       <el-card style="">
         <el-input
           style="width: 240px; margin-right: 10px"
-          v-model="data.name"
+          v-model="data.searchName"
           placeholder="Search for something..."
           prefix-icon="Search"
         ></el-input>
-        <el-button type="primary"> FIND</el-button>
-        <el-button type="warning">RESET </el-button>
+        <el-button type="primary" @click="loadEmployees"> FIND</el-button>
+        <el-button type="warning" @click="reset">RESET </el-button>
       </el-card>
     </div>
 
@@ -50,7 +50,7 @@ import { computed, reactive } from 'vue'
 import request from '@/utils/request.js'
 
 const data = reactive({
-  name: null,
+  searchName: null,
   tableData: [],
   tableProperty: {
     currentPage: 1,
@@ -77,6 +77,7 @@ const loadEmployees = () => {
     params: {
       pageNum: data.tableProperty.currentPage,
       pageSize: data.tableProperty.pageSize,
+      searchName: data.searchName,
     }
   }).then((res) => {
     data.tableData = res.data.list;
@@ -86,4 +87,8 @@ const loadEmployees = () => {
 }
 loadEmployees()
 
+const reset = () =>{
+  data.searchName = null
+  loadEmployees()
+}
 </script>

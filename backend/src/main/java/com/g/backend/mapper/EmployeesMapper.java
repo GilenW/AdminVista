@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface EmployeesMapper {
-    List<Employees> selectAllEmployees();
+    List<Employees> selectAllEmployees(Employees employees);
 
     @Select("select * from employees where id = #{id}")
     Employees selectByEmployeeId(Integer id);

@@ -5,7 +5,9 @@
     
     <select id="selectAllEmployees"
             resultType="com.g.backend.entity.Employees">
-        select * from employees
+        select * from employees <where>
+        <if test="name != null">name like concat('%',#{name},'%')</if>
+    </where>
     </select>
 
     <select id="insert" parameterType="com.g.backend.entity.Employees" >

@@ -35,8 +35,9 @@ public class EmployeesController {
     }
 
     @GetMapping("/selectAllEmployees")
-    public Result selectAll() {
-        List<Employees> employeesList =  employeesService.selectAllEmployees();
+    public Result selectAll(Employees employees) {
+        List<Employees> employeesList =
+                employeesService.selectAllEmployees(employees);
         return Result.success(employeesList);
     }
 
@@ -47,9 +48,14 @@ public class EmployeesController {
     }
 
     @GetMapping("/selectPageEmployees")
-    public Result selectPageEmployees(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "3") Integer pageSize) {
-        PageInfo<Employees> employees =
-                employeesService.selectPageEmployees(pageNum, pageSize);
-        return Result.success(employees);
+    public Result selectPageEmployees(@RequestParam(required = false) String searchName,
+                                      @RequestParam(defaultValue =
+            "1") Integer pageNum, @RequestParam(defaultValue = "3") Integer pageSize) {
+        Employees employees = new Employees();
+        employees.setName(searchName);
+        PageInfo<Employees> employList =
+                employeesService.selectPageEmployees(employees, pageNum,
+                        pageSize);
+        return Result.success(employList);
     }
 }

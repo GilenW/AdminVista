@@ -18,9 +18,9 @@ public class EmployeesService {
 
 
 
-    public List<Employees> selectAllEmployees() {
+    public List<Employees> selectAllEmployees(Employees employees) {
 
-        return employeesMapper.selectAllEmployees();
+        return employeesMapper.selectAllEmployees(employees);
 
     }
 
@@ -28,9 +28,12 @@ public class EmployeesService {
         return employeesMapper.selectByEmployeeId(id);
     }
 
-    public PageInfo<Employees> selectPageEmployees(Integer pageNum, Integer pageSize) {
+    public PageInfo<Employees> selectPageEmployees(Employees employees,
+                                                   Integer pageNum,
+                                                   Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Employees> employeesList = employeesMapper.selectAllEmployees();
+        List<Employees> employeesList =
+                employeesMapper.selectAllEmployees(employees);
         return PageInfo.of(employeesList);
     }
 
