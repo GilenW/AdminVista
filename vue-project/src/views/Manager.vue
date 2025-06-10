@@ -42,7 +42,7 @@
           <el-icon><UserFilled /></el-icon>
           Account
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item index="/login">
           <el-icon><SwitchButton /></el-icon>
           Logout
         </el-menu-item>

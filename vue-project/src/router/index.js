@@ -6,10 +6,12 @@ import RouterVuePractice from '@/views/RouterVuePractice.vue'
 import Manager from '@/views/Manager.vue'
 import Analysis from '@/views/Analysis.vue'
 import Employees from '@/views/Employees.vue'
+import Login from '@/views/Login.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+
     {
       path: '/',
       redirect: '/manager/home',
@@ -48,6 +50,14 @@ const router = createRouter({
         },
 
       ],
+    },
+    {
+      path:'/login',
+      name: 'Login Page',
+      meta:{
+        title: 'Login Page',
+      },
+      component: Login,
     },
 
     // the follwoing are practice routers
