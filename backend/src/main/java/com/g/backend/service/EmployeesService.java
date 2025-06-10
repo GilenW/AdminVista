@@ -48,4 +48,10 @@ public class EmployeesService {
     public void deleteById(Integer id) {
         employeesMapper.deleteById(id);
     }
+
+    public void deleteBatch(List<Integer> ids) {
+        for (Integer id : ids) {
+            employeesMapper.deleteById(id);
+        }
+    }
 }

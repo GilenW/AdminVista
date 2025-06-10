@@ -5,13 +5,16 @@ import com.g.backend.entity.Employees;
 import com.g.backend.service.EmployeesService;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
+@Slf4j
 public class EmployeesController {
+
 
     @Resource
     private EmployeesService employeesService;
@@ -31,6 +34,13 @@ public class EmployeesController {
     @DeleteMapping("/deleteById/{id}")
     public Result deleteById(@PathVariable Integer id) {
         employeesService.deleteById(id);
+        return Result.success();
+    }
+
+    @DeleteMapping("/deleteBatch")
+    public Result deleteBatch(@RequestBody List<Integer> ids) {
+        log.info("ids : {}", ids);
+        employeesService.deleteBatch(ids);
         return Result.success();
     }
 
