@@ -7,6 +7,7 @@ import Manager from '@/views/Manager.vue'
 import Analysis from '@/views/Analysis.vue'
 import Employees from '@/views/Employees.vue'
 import Login from '@/views/Login.vue'
+import Register from '@/views/Register.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +59,14 @@ const router = createRouter({
         title: 'Login Page',
       },
       component: Login,
+    },
+    {
+      path:'/register',
+      name: 'Register Page',
+      meta:{
+        title: 'Register Page',
+      },
+      component: Register,
     },
 
     // the follwoing are practice routers

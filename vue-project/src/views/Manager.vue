@@ -10,7 +10,8 @@
       <div style="flex: 1"></div>
       <div style="width: fit-content; display: flex; align-items: center; padding-right: 10px">
         <img src="" style="width: 40px; height: 40px" />
-        <span style="color: white; margin-left: 10px"> User Name</span>
+        <span style="color: white; margin-left: 10px">{{data.loginUser
+          .name}}</span>
       </div>
     </div>
   </div>
@@ -68,6 +69,11 @@ import {
   UserFilled,
 } from '@element-plus/icons-vue'
 import request from '@/utils/request.js'
+import { reactive } from 'vue'
+
+const data = reactive({
+  loginUser: JSON.parse(localStorage.getItem('login-user')),
+})
 </script>
 
 <style scoped>

@@ -1,6 +1,8 @@
 package com.g.backend.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.g.backend.entity.Employees;
+import com.g.backend.exception.CustomException;
 import com.g.backend.mapper.EmployeesMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -38,6 +40,18 @@ public class EmployeesService {
     }
 
     public void add(Employees employees) {
+        String username = employees.getUsername();
+        Employees dbEmployee = employeesMapper.selectByUsername(username);
+        if (dbEmployee != null) {
+            throw new CustomException("500", "Username is already taken");
+        }
+        if(StrUtil.isBlank(employees.getPassword())) {
+            employees.setPassword("123");
+        }
+        if(StrUtil.isBlank(employees.getName())) {
+            employees.setName(username);
+        }
+        employees.setRole("EMP");
         employeesMapper.insert(employees);
     }
 
@@ -53,5 +67,24 @@ public class EmployeesService {
         for (Integer id : ids) {
             employeesMapper.deleteById(id);
         }
+    }
+
+    public Employees login(Employees employees) {
+        String username = employees.getUsername();
+        String password = employees.getPassword();
+        Employees dbEmployee = employeesMapper.selectByUsername(username);
+        if (dbEmployee == null) {
+            throw new CustomException("500", "No user found");
+        }
+        if (!password.equals(dbEmployee.getPassword())) {
+            throw new CustomException("500", "Wrong password");
+        }
+        return dbEmployee;
+    }
+
+    public void register(Employees employees) {
+
+        this.add(employees);
+
     }
 }

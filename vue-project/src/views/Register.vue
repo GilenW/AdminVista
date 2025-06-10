@@ -9,7 +9,7 @@
             <div
               style="margin-bottom: 30px; font-size: 25px; color:
               var(--primary-color); text-align: center; ">Welcome to
-              access
+              register
               management
               system</div>
             <el-form ref="formRef" :rules="data.rules" :model="data.form"
@@ -25,16 +25,20 @@
                           v-model="data.form.password"
                           placeholder="Please enter password" ></el-input>
               </el-form-item>
-
-
+              <el-form-item prop="confirmPassword">
+                <el-input show-password prop="confirmPassword" size="large" prefix-icon="Lock"
+                          v-model="data.form.confirmPassword"
+                          placeholder="Please confirm password" ></el-input>
+              </el-form-item>
             </el-form>
             <el-button size="large" style="width: 100%; margin-bottom: 20px"
-                       type="primary" @click="login">LOGIN
+                       type="primary" @click="register">REGISTER
             </el-button>
-            <div style="text-align: right; color: grey">Don't have an account? <a
+            <div style="text-align: right; color: grey"><a
               style="color:
             var(--primary-color); text-decoration: none"
-                                          href="/register">register</a>
+                                          href="/login">Login with an
+              account</a>
             </div>
           </div>
           </div>
@@ -48,30 +52,42 @@
 import { reactive, ref } from 'vue'
 import request from '@/utils/request.js'
 import { ElMessage } from 'element-plus'
-
+const validatePass = (rule, value, callback) => {
+  if(!value){
+    callback(new Error('Please confirm password'))
+  }else if (value !== data.form.password){
+    callback(new Error('Passwords do not match!'))
+  }else {
+    callback()
+  }
+}
 const data =reactive({
   form: {
     username: '',
     password: '',
+    confirmPassword:'',
   },
   rules: {
     username:[{required: true, message: 'Please enter username', trigger: 'blur'}],
     password:[{required: true, message: 'Please enter password', trigger: 'blur'}],
+    confirmPassword:[{
+      validator: validatePass, trigger: 'blur'
+    }]
   }
 })
 
 
 const formRef = ref()
 
-const login = () => {
+const register = () => {
   formRef.value.validate((valid)=>{
       if(valid){
-        request.post('/login', data.form).then((res) => {
+
+        request.post('/register', data.form).then((res) => {
           if (res.code == '200') {
-            localStorage.setItem('login-user', JSON.stringify(res.data))
-            ElMessage.success('Login successful!')
+            ElMessage.success('Registration successful!')
             setTimeout(()=>{
-              location.href="/manager/home";
+              location.href="/login";
             }, 500)
 
           } else {
@@ -82,6 +98,8 @@ const login = () => {
   }
   )
 }
+
+
 </script>
 
 <style scoped>
