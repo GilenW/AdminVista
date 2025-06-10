@@ -16,7 +16,7 @@
     <div>
       <el-card>
         <el-button type="primary" @click="loadForm">NEW</el-button>
-        <el-button type="warning">MULTIPLE DELETE</el-button>
+        <el-button type="warning" >MULTIPLE DELETE</el-button>
         <el-button type="primary">IMPORT</el-button>
         <el-button type="success">EXPORT</el-button>
       </el-card>
@@ -25,10 +25,21 @@
     <!-- table -->
     <div>
       <el-card>
-        <el-table :data="data.tableData" stripe>
+        <el-table :data="data.tableData" stripe @selection-change="selectionChange">
+          <el-table-column type="selection"  width="80"></el-table-column>
           <el-table-column prop="name" label="Name" width="180" />
           <el-table-column prop="age" label="Age" width="180" />
           <el-table-column prop="position" label="Position" show-overflow-tooltip />
+          <el-table-column label="Actions" width="200">
+            <template #default="scope">
+              <el-button type="primary"
+                         @click="handleUpdateEmployees(scope.row)"
+                         :icon="Edit" circle></el-button>
+              <el-button type="danger" :icon="Delete" circle
+                         @click="deleteEmployees(scope.row)"></el-button>
+            </template>
+          </el-table-column>
+
         </el-table>
       </el-card>
       <div style="margin-top: 10px">
@@ -71,7 +82,8 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import request from '@/utils/request.js'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Delete, Edit } from '@element-plus/icons-vue'
 
 const data = reactive({
   searchName: null,
@@ -118,6 +130,17 @@ const loadForm = () => {
 }
 
 const saveEmployees = () => {
+  if (data.form.id){
+    updateEmployees();
+
+  }else {
+    addEmployees()
+
+  }
+
+}
+
+const addEmployees = () => {
   request.post('/employees/add', data.form).then((res) => {
     if(res.code == '200'){
       ElMessage.success("Successfully added!")
@@ -127,5 +150,40 @@ const saveEmployees = () => {
       ElMessage.error(res.msg)
     }
   })
+}
+const updateEmployees = () => {
+  request.put('/employees/update', data.form).then((res) => {
+    if(res.code == '200'){
+      ElMessage.success("Successfully updated!")
+      data.formVisible = false
+      loadEmployees()
+    }else {
+      ElMessage.error(res.msg)
+
+    }
+  })
+}
+
+const handleUpdateEmployees = (row) => {
+  data.form = JSON.parse(JSON.stringify(row))
+  data.formVisible = true
+}
+
+const deleteEmployees = (row) => {
+  ElMessageBox.confirm('Are you sure you want to delete this employee?').then(() => {
+    request.delete("/employees/deleteById/" + row.id).then((res) => {
+      if(res.code == '200'){
+        ElMessage.success("Successfully deleted!")
+        loadEmployees()
+      }else {
+        ElMessage.error(res.msg)
+      }
+    })
+  }).catch(() => {
+
+  })
+
+
+
 }
 </script>
