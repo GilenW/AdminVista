@@ -16,7 +16,7 @@
     <div>
       <el-card>
         <el-button type="primary" @click="loadForm">NEW</el-button>
-        <el-button type="warning" >MULTIPLE DELETE</el-button>
+        <el-button type="warning" @click="deleteSelectedRow">DELETE SELECTED ROWS</el-button>
         <el-button type="primary">IMPORT</el-button>
         <el-button type="success">EXPORT</el-button>
       </el-card>
@@ -36,7 +36,7 @@
                          @click="handleUpdateEmployees(scope.row)"
                          :icon="Edit" circle></el-button>
               <el-button type="danger" :icon="Delete" circle
-                         @click="deleteEmployees(scope.row)"></el-button>
+                         @click="deleteEmployees(scope.row.id)"></el-button>
             </template>
           </el-table-column>
 
@@ -101,7 +101,8 @@ const data = reactive({
     age: null,
     position: null,
 
-  }
+  },
+  selectedRows: []
 })
 
 const loadEmployees = () => {
@@ -169,9 +170,9 @@ const handleUpdateEmployees = (row) => {
   data.formVisible = true
 }
 
-const deleteEmployees = (row) => {
+const deleteEmployees = (id) => {
   ElMessageBox.confirm('Are you sure you want to delete this employee?').then(() => {
-    request.delete("/employees/deleteById/" + row.id).then((res) => {
+    request.delete("/employees/deleteById/" + id).then((res) => {
       if(res.code == '200'){
         ElMessage.success("Successfully deleted!")
         loadEmployees()
@@ -183,7 +184,31 @@ const deleteEmployees = (row) => {
 
   })
 
+}
 
+const selectionChange = (rows) => {
+  data.selectedRows = rows.map(row => row.id)
+}
+
+const deleteSelectedRow = () => {
+  if (data.selectedRows.length == 0){
+    ElMessage.warning("No selected rows found.")
+    return
+  }
+  ElMessageBox.confirm('Are you sure you want to delete this employee?').then(() => {
+    request.delete("/employees/deleteBatch", {
+      data: data.selectedRows
+    }).then((res) => {
+      if(res.code == '200'){
+        ElMessage.success("Successfully deleted!")
+        loadEmployees()
+      }else {
+        ElMessage.error(res.msg)
+      }
+    })
+  }).catch(() => {
+
+  })
 
 }
 </script>
