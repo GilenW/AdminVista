@@ -12,13 +12,16 @@
     </select>
 
     <select id="insert" parameterType="com.g.backend.entity.Employees" >
-        insert into `employees` (name, age, position) values (#{name},#{age}, #{position})
+        insert into `employees` (name, age, position, username, password, role)
+        values
+            (#{name},#{age}, #{position}, #{username}, #{password}, #{role})
     </select>
 
 
     <select id="update" parameterType="com.g.backend.entity.Employees" >
         update `employees` set name=#{name},age=#{age},
-        position=#{position} where id=#{id}
+        position=#{position},  username=#{username},
+                               password=#{password},role=#{role} where id=#{id}
     </select>
 
 
