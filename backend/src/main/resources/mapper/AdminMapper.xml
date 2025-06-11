@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.g.backend.mapper.AdminMapper">
+
+    <select id="selectAllAdmin"
+            resultType="com.g.backend.entity.Admin">
+        select * from admin <where>
+        <if test="name != null">name like concat('%',#{name},'%')</if>
+    </where>
+        order by id desc
+    </select>
+
+    <select id="insert" parameterType="com.g.backend.entity.Admin" >
+        insert into `admin` (name, username, password, role)
+        values
+            (#{name}, #{username}, #{password}, #{role})
+    </select>
+
+
+    <select id="update" parameterType="com.g.backend.entity.Admin" >
+        update `admin` set name=#{name}, username=#{username},
+                               password=#{password},role=#{role} where id=#{id}
+    </select>
+
+
+</mapper>

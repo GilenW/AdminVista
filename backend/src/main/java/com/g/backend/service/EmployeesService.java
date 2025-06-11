@@ -1,6 +1,7 @@
 package com.g.backend.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.g.backend.entity.Account;
 import com.g.backend.entity.Employees;
 import com.g.backend.exception.CustomException;
 import com.g.backend.mapper.EmployeesMapper;
@@ -69,7 +70,7 @@ public class EmployeesService {
         }
     }
 
-    public Employees login(Employees employees) {
+    public Employees login(Account employees) {
         String username = employees.getUsername();
         String password = employees.getPassword();
         Employees dbEmployee = employeesMapper.selectByUsername(username);

@@ -8,6 +8,8 @@ import Analysis from '@/views/Analysis.vue'
 import Employees from '@/views/Employees.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
+import Admin from '@/views/Admin.vue'
+import PersonalInfo from '@/views/PersonalInfo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +17,7 @@ const router = createRouter({
 
     {
       path: '/',
-      redirect: '/manager/home',
+      redirect: '/login',
     },
     {
       path: '/manager',
@@ -49,6 +51,22 @@ const router = createRouter({
             title: 'Employees',
           },
         },
+        {
+          path: 'admin',
+          name: 'admin',
+          component: Admin,
+          meta: {
+            title: 'Admin',
+          },
+        },
+        {
+          path: 'personalInfo',
+          name: 'personalInfo',
+          component: PersonalInfo,
+          meta: {
+            title: 'Personal Info',
+          },
+        }
 
       ],
     },

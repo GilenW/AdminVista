@@ -20,12 +20,19 @@
                           placeholder="Please enter username"
                 ></el-input>
               </el-form-item>
+
+
               <el-form-item prop="password">
                 <el-input show-password prop="password" size="large" prefix-icon="Lock"
                           v-model="data.form.password"
                           placeholder="Please enter password" ></el-input>
               </el-form-item>
-
+              <el-form-item prop="role">
+                <el-select v-model="data.form.role" placeholder="Please select role">
+                  <el-option value="ADMIN" label="admin"></el-option>
+                  <el-option value="EMP" label="employee"></el-option>
+                </el-select>
+              </el-form-item>
 
             </el-form>
             <el-button size="large" style="width: 100%; margin-bottom: 20px"
@@ -53,6 +60,7 @@ const data =reactive({
   form: {
     username: '',
     password: '',
+    role: 'ADMIN',
   },
   rules: {
     username:[{required: true, message: 'Please enter username', trigger: 'blur'}],

@@ -35,15 +35,15 @@
             <el-icon><User /></el-icon>
             <span>User Management</span>
           </template>
-          <el-menu-item>Admin </el-menu-item>
+          <el-menu-item index="/manager/admin">Admin </el-menu-item>
           <el-menu-item index="/manager/employees">Employees </el-menu-item>
         </el-sub-menu>
 
-        <el-menu-item index="/manager/person">
+        <el-menu-item index="/manager/personalInfo">
           <el-icon><UserFilled /></el-icon>
-          Account
+          Personal Information
         </el-menu-item>
-        <el-menu-item index="/login">
+        <el-menu-item @click="logout">
           <el-icon><SwitchButton /></el-icon>
           Logout
         </el-menu-item>
@@ -53,7 +53,7 @@
 
     <!--    right section starts-->
     <div style="flex: 1; width: 0; background-color: aliceblue; padding: 10px">
-      <RouterView></RouterView>
+      <RouterView @updateUser="updateUser"></RouterView>
     </div>
   </div>
 </template>
@@ -74,6 +74,16 @@ import { reactive } from 'vue'
 const data = reactive({
   loginUser: JSON.parse(localStorage.getItem('login-user')),
 })
+
+const logout = () => {
+  localStorage.removeItem('login-user')
+  location.href = '/login'
+}
+
+const updateUser = () => {
+  data.loginUser = JSON.parse(localStorage.getItem('login-user'))
+
+}
 </script>
 
 <style scoped>
