@@ -1,5 +1,5 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <el-card style="width:700px">
+  <el-card style="width:700px;padding: 40px 20px;">
       <el-form ref="formRef" :rules="data.rules" :model="data.form"
                style="margin-right: 50px">
         <el-form-item label="Name" label-width="80px">

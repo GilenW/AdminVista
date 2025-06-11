@@ -43,6 +43,10 @@
           <el-icon><UserFilled /></el-icon>
           Personal Information
         </el-menu-item>
+        <el-menu-item index="/manager/password">
+          <el-icon><Lock /></el-icon>
+          Password
+        </el-menu-item>
         <el-menu-item @click="logout">
           <el-icon><SwitchButton /></el-icon>
           Logout
@@ -63,10 +67,10 @@ import router from '@/router/index.js'
 import {
   DataAnalysis,
   Loading,
-  Location,
+  Location, Lock,
   SwitchButton,
   User,
-  UserFilled,
+  UserFilled
 } from '@element-plus/icons-vue'
 import request from '@/utils/request.js'
 import { reactive } from 'vue'

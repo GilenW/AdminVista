@@ -124,7 +124,6 @@ const loadEmployees = () => {
       },
     })
     .then((res) => {
-      console.log(res.data.list)
 
       data.tableData = res.data.list
       data.tableProperty.total = res.data.total
@@ -145,7 +144,6 @@ const loadForm = () => {
 const saveEmployees = () => {
   formRef.value.validate((valid) => {
     if (valid) {
-      console.log(data.form)
       data.form.id ? updateEmployees() : addEmployees()
     }
   })

@@ -6,6 +6,7 @@ public class Account {
     private String username;
     private String password;
     private String role;
+    private String newPassword;
 
     public Integer getId() {
         return id;
@@ -45,5 +46,9 @@ public class Account {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getNewPassword() {
+        return this.newPassword;
     }
 }

@@ -10,6 +10,7 @@ import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import Admin from '@/views/Admin.vue'
 import PersonalInfo from '@/views/PersonalInfo.vue'
+import Password from '@/views/Password.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,7 +67,16 @@ const router = createRouter({
           meta: {
             title: 'Personal Info',
           },
+        },
+        {
+          path: 'Password',
+          name: 'password',
+          component: Password,
+          meta: {
+            title: 'Change Password',
+          },
         }
+
 
       ],
     },
