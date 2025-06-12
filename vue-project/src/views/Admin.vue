@@ -27,7 +27,7 @@
       <el-card>
         <el-table :data="data.tableData" stripe @selection-change="selectionChange">
           <el-table-column type="selection" width="80"></el-table-column>
-          <el-table-column label="avatar">
+          <el-table-column label="avatar" width="180">
             <template #default="scope">
               <img v-if="scope.row.avatar" :src="scope.row.avatar"  alt=""
                    style="display:block; width: 40px;
@@ -37,8 +37,20 @@
           </el-table-column>
           <el-table-column prop="name" label="Name" width="180" />
           <el-table-column prop="username" label="Username" width="180"></el-table-column>
-          <el-table-column label="Actions" width="180">
+          <el-table-column prop="content" label="Content"
+                           width="180">
             <template #default="scope">
+              <div v-html="scope.row.content"></div>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Actions" width="250">
+            <template #default="scope">
+              <el-button
+                type="primary"
+                @click="editContent(scope.row)"
+              >Edit Content</el-button>
+
               <el-button
                 type="primary"
                 @click="handleUpdateEmployees(scope.row)"
@@ -88,6 +100,30 @@
         </div>
       </template>
     </el-dialog>
+
+    <el-dialog v-model="data.dialogContentVisible" title="Edit Content"
+               width="800">
+    <div style="padding: 20px">
+      <div style="border: 1px solid #ccc; width: 100%">
+        <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef"
+                 :mode="mode">
+        </Toolbar>
+        <Editor
+          style="height: 500px; overflow-y: hidden;"
+          v-model="data.form.content"
+          :defaultConfig="editorConfig"
+          :mode="mode"
+          @onCreated="handleContentCreated"
+        />
+      </div>
+    </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="data.dialogContentVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="saveContent"> Confirm </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -96,6 +132,11 @@ import { computed, reactive, ref } from 'vue'
 import request from '@/utils/request.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Edit } from '@element-plus/icons-vue'
+
+import '@wangeditor/editor/dist/css/style.css'
+import {onBeforeUnmount, shallowRef} from 'vue'
+import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
+import { i18nChangeLanguage } from '@wangeditor/editor'
 
 const data = reactive({
   searchName: null,
@@ -113,11 +154,13 @@ const data = reactive({
     username: null,
     password: null,
     role: null,
+    content: null,
   },
   selectedRows: [],
   rules: {
     username: [{ required: true, message: 'Please enter username', trigger: 'blur' }],
   },
+  dialogContentVisible:false,
 })
 
 const formRef = ref(null)
@@ -225,5 +268,39 @@ const deleteSelectedRow = () => {
         })
     })
     .catch(() => {})
+}
+
+i18nChangeLanguage('en')
+
+const editContent = (row) => {
+  data.dialogContentVisible = true
+  data.form.content = row.content
+}
+
+// editor content initialization
+
+const baseURl = "http://localhost:9090"
+const editorRef = shallowRef(null)
+const mode = 'default'
+const editorConfig = {MENU_CONF:{}}
+editorConfig.MENU_CONF['uploadImage'] = {
+  server:baseURl + '/files/wang/upload',
+  fileName: 'file',
+}
+
+onBeforeUnmount(()=>{
+  const editor = editorRef.value
+  if (editor == null) {
+    return
+  }
+  editor.destroy()
+})
+
+const handleContentCreated = (editor) => {
+  editorRef.value = editor
+}
+
+const saveContent = () =>{
+  data.dialogContentVisible = false
 }
 </script>
