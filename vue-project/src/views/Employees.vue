@@ -27,6 +27,14 @@
       <el-card>
         <el-table :data="data.tableData" stripe @selection-change="selectionChange">
           <el-table-column type="selection" width="80"></el-table-column>
+          <el-table-column label="avatar">
+            <template #default="scope">
+              <img v-if="scope.row.avatar"  :src="scope.row.avatar"  alt=""
+                   style="display:block; width: 40px;
+              height:
+               40px; border-radius: 50%">
+            </template>
+          </el-table-column>
           <el-table-column prop="name" label="Name" width="180" />
           <el-table-column prop="age" label="Age" width="180" />
           <el-table-column prop="position" label="Position" show-overflow-tooltip width="180" />
