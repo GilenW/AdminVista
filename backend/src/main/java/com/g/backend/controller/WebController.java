@@ -11,6 +11,12 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @RestController
 public class WebController {
 
@@ -63,5 +69,20 @@ public class WebController {
     }
 
 
+    @GetMapping("/pieChart")
+    public Result pieChart() {
+        Map<String, Integer> map = new HashMap<>();
+        Employees employees = new Employees();
+        employees.setName("");
+        List<Employees> employeesList =
+                employeesService.selectAllEmployees(employees);
+        Set<String> positionList =
+                employeesList.stream().map(Employees::getPosition).collect(Collectors.toSet());
+        for(String position : positionList) {
+            long count = employeesList.stream().filter(employee -> position.equals(employee.getPosition())).count();
+            map.put(position, (int) count);
+        }
+        return Result.success(map);
+    }
 }
 

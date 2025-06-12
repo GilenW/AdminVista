@@ -1,94 +1,86 @@
 <template>
-  <div>
-    <div>
-      <el-card style="">
-        <el-input
-          style="width: 240px; margin-right: 10px"
-          v-model="data.name"
-          placeholder="Search for something..."
-          prefix-icon="Search"
-        ></el-input>
-        <el-button type="primary"> FIND</el-button>
-        <el-button type="warning">RESET </el-button>
+
+  <div >
+    <div style="display: flex; grid-gap: 10px">
+      <el-card id="main"
+               style="flex:1; width: 600px; height: 400px;padding: 50px">
       </el-card>
+<!--      <el-card id="main"-->
+<!--               style="flex:1; width: 600px; height: 400px;padding: 50px">-->
+<!--      </el-card>-->
+
     </div>
 
-    <div>
-      <el-card>
-        <el-button type="primary">NEW</el-button>
-        <el-button type="warning">MULTIPLE DELETE</el-button>
-        <el-button type="primary">IMPORT</el-button>
-        <el-button type="success">EXPORT</el-button>
-      </el-card>
-    </div>
 
-    <!-- table -->
-    <div>
-      <el-card>
-        <el-table :data="paginatedData" stripe>
-          <el-table-column prop="date" label="Date" width="180" />
-          <el-table-column prop="name" label="Name" width="180" />
-          <el-table-column prop="address" label="Address" />
-        </el-table>
-      </el-card>
-      <div style="margin-top: 10px">
-        <el-pagination
-          v-model:current-page="data.tableProperty.currentPage"
-          v-model:page-size="data.tableProperty.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="data.tableData.length"
-        />
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { computed, reactive } from 'vue'
+import { onMounted, reactive } from 'vue'
+import  * as echarts from 'echarts'
+import request from '@/utils/request.js'
+import { ElMessage } from 'element-plus'
 
-const data = reactive({
-  name: null,
-  tableData: [
-    {
-      date: '2021-05-01',
-      name: 'Apple',
-      address: 'Apple',
-    },
-    {
-      date: '2021-05-01',
-      name: 'Ban',
-      address: 'Apple',
-    },
-    {
-      date: '2021-05-01',
-      name: 'Orange',
-      address: 'Apple',
-    },
-    {
-      date: '2021-05-01',
-      name: 'Watermelon',
-      address: 'Apple',
-    },
-  ],
-  tableProperty: {
-    currentPage: 1,
-    pageSize: 2,
-    size: null,
-    disabled: false,
-    background: null,
+const data =  reactive({
+
+})
+
+const option = {
+  title: {
+    text: 'Positions',
+    subtext: 'Fake Data',
+    left: 'center'
   },
-  dialogTableVisible: false,
-  editRow: null,
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    orient: 'vertical',
+    left: 'left'
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: '50%',
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' }
+      ],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }
+  ]
+};
+
+onMounted(() => {
+  const myChart = echarts.init(document.getElementById('main'));
+  request.get("/pieChart").then(res => {
+    console.log(res)
+    if (res.code == "200") {
+      const newData = Object.entries(res.data).map(([key, value]) => ({
+        value: value,
+        name: key
+      }));
+      option.series[0].data = newData;
+      myChart.setOption(option);
+
+    } else{
+    ElMessage.error(err.msg);
+
+  }
+  })
+
 })
-const handleSizeChange = (value) => {
-  data.tableProperty.size = value
-}
-const handleCurrentChange = (value) => {
-  data.tableProperty.currentPage = value
-}
-const paginatedData = computed(() => {
-  const start = (data.tableProperty.currentPage - 1) * data.tableProperty.pageSize
-  const end = start + data.tableProperty.pageSize
-  return data.tableData.slice(start, end)
-})
+
+
+
 </script>
