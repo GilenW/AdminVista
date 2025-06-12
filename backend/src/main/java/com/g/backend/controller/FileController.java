@@ -18,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/files")
 public class FileController {
 
+    private static final String URL_PREFIX = "http://localhost:9090/files/";
+
     private static final String filePath = System.getProperty("user.dir") + "/src/main/resources/static/files/";
 
     @PostMapping("/upload")
@@ -35,8 +37,8 @@ public class FileController {
             e.printStackTrace();
             throw new CustomException("500", "Failed to upload file");
         }
-
-        return Result.success();
+        String url = URL_PREFIX + "download/" + fileName;
+        return Result.success(url);
     }
 
 
