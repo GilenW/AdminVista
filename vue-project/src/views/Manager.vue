@@ -34,6 +34,10 @@
           <el-icon><DataAnalysis /></el-icon>
           Analysis</el-menu-item
         >
+        <el-menu-item index="/manager/articles">
+          <el-icon><Notebook /></el-icon>
+          Articles</el-menu-item
+        >
         <el-sub-menu index="1">
           <template #title>
             <el-icon><User /></el-icon>
@@ -71,7 +75,7 @@ import router from '@/router/index.js'
 import {
   DataAnalysis,
   Loading,
-  Location, Lock,
+  Location, Lock, Notebook,
   SwitchButton,
   User,
   UserFilled

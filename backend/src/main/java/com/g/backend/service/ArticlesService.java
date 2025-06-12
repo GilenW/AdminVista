@@ -1,5 +1,6 @@
 package com.g.backend.service;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.g.backend.entity.Account;
 import com.g.backend.entity.Articles;
@@ -20,7 +21,7 @@ public class ArticlesService {
 
 
     public void add(Articles articles) {
-
+        articles.setTime(DateUtil.now());
         articlesMapper.insert(articles);
     }
 

@@ -5,10 +5,10 @@
         <el-input
           style="width: 240px; margin-right: 10px"
           v-model="data.searchName"
-          placeholder="Search for something..."
+          placeholder="Search for title..."
           prefix-icon="Search"
         ></el-input>
-        <el-button type="primary" @click="loadEmployees"> FIND</el-button>
+        <el-button type="primary" @click="loadArticles"> FIND</el-button>
         <el-button type="warning" @click="reset">RESET </el-button>
       </el-card>
     </div>
@@ -27,16 +27,19 @@
       <el-card>
         <el-table :data="data.tableData" stripe @selection-change="selectionChange">
           <el-table-column type="selection" width="80"></el-table-column>
-          <el-table-column label="avatar" width="180">
+          <el-table-column label="" width="180">
             <template #default="scope">
-              <img v-if="scope.row.avatar" :src="scope.row.avatar"  alt=""
+              <img v-if="scope.row.img" :src="scope.row.img"  alt=""
                    style="display:block; width: 40px;
               height:
                40px; border-radius: 50%">
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="Name" width="180" />
-          <el-table-column prop="username" label="Username" width="180"></el-table-column>
+          <el-table-column prop="title" label="Title" width="180" />
+          <el-table-column prop="description" label="Description"
+                           width="180"></el-table-column>
+          <el-table-column prop="time" label="Time"
+                           width="180"></el-table-column>
           <el-table-column prop="content" label="Content"
                            width="180">
             <template #default="scope">
@@ -46,14 +49,10 @@
 
           <el-table-column label="Actions" width="250">
             <template #default="scope">
-              <el-button
-                type="primary"
-                @click="editContent(scope.row)"
-              >Edit Content</el-button>
 
               <el-button
                 type="primary"
-                @click="handleUpdateEmployees(scope.row)"
+                @click="editContent(scope.row)"
                 :icon="Edit"
                 circle
               ></el-button>
@@ -61,7 +60,7 @@
                 type="danger"
                 :icon="Delete"
                 circle
-                @click="deleteEmployees(scope.row.id)"
+                @click="deleteArticles(scope.row.id)"
               ></el-button>
             </template>
           </el-table-column>
@@ -69,7 +68,7 @@
       </el-card>
       <div style="margin-top: 10px">
         <el-pagination
-          @change="loadEmployees"
+          @change="loadArticles"
           v-model:current-page="data.tableProperty.currentPage"
           v-model:page-size="data.tableProperty.pageSize"
           :page-sizes="[5, 10, 15, 20]"
@@ -79,48 +78,52 @@
       </div>
     </div>
 
-    <el-dialog v-model="data.formVisible" title="Admin Information"
-               width="500" destroy-on-close>
-      <el-form ref="formRef" :rules="data.rules" :model="data.form"
-               style="margin-right: 50px">
-        <el-form-item label="Name" label-width="80px">
-          <el-input v-model="data.form.name" autocomplete="off" />
-        </el-form-item>
-
-        <el-form-item prop="username" label="Username" label-width="80px">
-          <el-input v-model="data.form.username" autocomplete="off" />
-        </el-form-item>
-
-
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="data.formVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="saveEmployees"> Confirm </el-button>
-        </div>
-      </template>
-    </el-dialog>
 
     <el-dialog v-model="data.dialogContentVisible" title="Edit Content"
                width="800">
-    <div style="padding: 20px">
-      <div style="border: 1px solid #ccc; width: 100%">
-        <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef"
-                 :mode="mode">
-        </Toolbar>
-        <Editor
-          style="height: 500px; overflow-y: hidden;"
-          v-model="data.form.content"
-          :defaultConfig="editorConfig"
-          :mode="mode"
-          @onCreated="handleContentCreated"
-        />
+      <div>
+        <el-form ref="formRef" :model="data.form"
+                 style="margin-right: 50px">
+          <el-form-item label="Title" label-width="80px">
+            <el-input v-model="data.form.title" autocomplete="off" />
+          </el-form-item>
+
+          <el-form-item prop="description" label="Description"
+                        label-width="80px">
+            <el-input type="textarea" v-model="data.form.description"
+                      autocomplete="off" />
+          </el-form-item>
+
+          <el-form-item label="cover">
+            <el-upload
+            action="http://localhost:9090/files/upload"
+            list-type="picture"
+            :on-success="handleCoverSuccess">
+              Upload Cover
+            </el-upload>
+          </el-form-item>
+
+        </el-form>
       </div>
-    </div>
+      <div style="padding: 20px">
+        <div style="border: 1px solid #ccc; width: 100%">
+
+          <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef"
+                   :mode="mode">
+          </Toolbar>
+          <Editor
+            style="height: 500px; overflow-y: hidden;"
+            v-model="data.form.content"
+            :defaultConfig="editorConfig"
+            :mode="mode"
+            @onCreated="handleContentCreated"
+          />
+        </div>
+      </div>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="data.dialogContentVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="saveContent"> Confirm </el-button>
+          <el-button type="primary" @click="saveArticles"> Confirm </el-button>
         </div>
       </template>
     </el-dialog>
@@ -155,19 +158,17 @@ const data = reactive({
     password: null,
     role: null,
     content: null,
+    img: null,
   },
   selectedRows: [],
-  rules: {
-    username: [{ required: true, message: 'Please enter username', trigger: 'blur' }],
-  },
   dialogContentVisible:false,
 })
 
 const formRef = ref(null)
 
-const loadEmployees = () => {
+const loadArticles = () => {
   request
-    .get('/admin/selectPageAdmin', {
+    .get('/articles/selectPageArticles', {
       params: {
         pageNum: data.tableProperty.currentPage,
         pageSize: data.tableProperty.pageSize,
@@ -180,61 +181,62 @@ const loadEmployees = () => {
       data.tableProperty.total = res.data.total
     })
 }
-loadEmployees()
+loadArticles()
 
 const reset = () => {
   data.searchName = null
-  loadEmployees()
+  loadArticles()
 }
 
 const loadForm = () => {
-  data.formVisible = true
+  data.dialogContentVisible = true
   data.form = {}
 }
 
-const saveEmployees = () => {
+const saveArticles = () => {
+  data.dialogContentVisible = false
   formRef.value.validate((valid) => {
     if (valid) {
-      data.form.id ? updateEmployees() : addEmployees()
+      data.form.id ? updateArticles() : addArticles()
     }
   })
 }
 
-const addEmployees = () => {
-  request.post('/admin/add', data.form).then((res) => {
+const addArticles = () => {
+  request.post('/articles/add', data.form).then((res) => {
     if (res.code == '200') {
       ElMessage.success('Successfully added!')
       data.formVisible = false
-      loadEmployees()
+      loadArticles()
     } else {
       ElMessage.error(res.msg)
     }
   })
 }
-const updateEmployees = () => {
-  request.put('/admin/update', data.form).then((res) => {
+const updateArticles = () => {
+  request.put('/articles/update', data.form).then((res) => {
     if (res.code == '200') {
       ElMessage.success('Successfully updated!')
       data.formVisible = false
-      loadEmployees()
+      loadArticles()
     } else {
       ElMessage.error(res.msg)
     }
   })
 }
 
-const handleUpdateEmployees = (row) => {
+const handleUpdateArticles = (row) => {
   data.form = JSON.parse(JSON.stringify(row))
   data.formVisible = true
 }
 
-const deleteEmployees = (id) => {
-  ElMessageBox.confirm('Are you sure you want to delete this employee?')
+const deleteArticles = (id) => {
+  ElMessageBox.confirm('Are you sure you want to delete this article?')
     .then(() => {
-      request.delete('/admin/deleteById/' + id).then((res) => {
+      request.delete('/articles/deleteById/' + id).then((res) => {
         if (res.code == '200') {
           ElMessage.success('Successfully deleted!')
-          loadEmployees()
+          loadArticles()
         } else {
           ElMessage.error(res.msg)
         }
@@ -255,13 +257,13 @@ const deleteSelectedRow = () => {
   ElMessageBox.confirm('Are you sure you want to delete this employee?')
     .then(() => {
       request
-        .delete('/admin/deleteBatch', {
+        .delete('/articles/deleteBatch', {
           data: data.selectedRows,
         })
         .then((res) => {
           if (res.code == '200') {
             ElMessage.success('Successfully deleted!')
-            loadEmployees()
+            loadArticles()
           } else {
             ElMessage.error(res.msg)
           }
@@ -273,8 +275,8 @@ const deleteSelectedRow = () => {
 i18nChangeLanguage('en')
 
 const editContent = (row) => {
+  data.form = JSON.parse(JSON.stringify(row))
   data.dialogContentVisible = true
-  data.form.content = row.content
 }
 
 // editor content initialization
@@ -296,11 +298,13 @@ onBeforeUnmount(()=>{
   editor.destroy()
 })
 
+
+const handleCoverSuccess = (res) => {
+  data.form.img = res.data
+}
+
 const handleContentCreated = (editor) => {
   editorRef.value = editor
 }
 
-const saveContent = () =>{
-  data.dialogContentVisible = false
-}
 </script>
