@@ -27,26 +27,35 @@
       <el-card>
         <el-table :data="data.tableData" stripe @selection-change="selectionChange">
           <el-table-column type="selection" width="80"></el-table-column>
-          <el-table-column label="" width="180">
+          <el-table-column label="Cover" width="180">
             <template #default="scope">
-              <img v-if="scope.row.img" :src="scope.row.img"  alt=""
-                   style="display:block; width: 40px;
+              <el-image v-if="scope.row.img" :src="scope.row.img"
+                        :preview-src-list=[scope.row.img]  preview-teleported
+                   style="display:block; width: 100px;
               height:
-               40px; border-radius: 50%">
+               60px; "> </el-image>
             </template>
           </el-table-column>
           <el-table-column prop="title" label="Title" width="180" />
           <el-table-column prop="description" label="Description"
-                           width="180"></el-table-column>
-          <el-table-column prop="time" label="Time"
-                           width="180"></el-table-column>
+                           width="180" show-overflow-tooltip></el-table-column>
+
+<!--          <el-table-column prop="content" label="Content"-->
+<!--                           width="180" show-overflow-tooltip>-->
+<!--            <template #default="scope">-->
+<!--              <div v-html="scope.row.content" style="max-height: 80px; overflow: auto; white-space: normal;"></div>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
           <el-table-column prop="content" label="Content"
-                           width="180">
+                           width="180" show-overflow-tooltip>
             <template #default="scope">
-              <div v-html="scope.row.content"></div>
+              <el-button type="primary"
+                         @click="viewContent(scope.row.content)">SEE
+                CONTENT</el-button>
             </template>
           </el-table-column>
-
+          <el-table-column prop="time" label="Time"
+                           width="180"></el-table-column>
           <el-table-column label="Actions" width="250">
             <template #default="scope">
 
@@ -79,11 +88,11 @@
     </div>
 
 
-    <el-dialog v-model="data.dialogContentVisible" title="Edit Content"
+    <el-dialog v-model="data.dialogContentVisible" title="Article"
                width="800">
       <div>
         <el-form ref="formRef" :model="data.form"
-                 style="margin-right: 50px">
+                 style="margin-right: 50px" label-position="left">
           <el-form-item label="Title" label-width="80px">
             <el-input v-model="data.form.title" autocomplete="off" />
           </el-form-item>
@@ -99,10 +108,11 @@
             action="http://localhost:9090/files/upload"
             list-type="picture"
             :on-success="handleCoverSuccess">
-              Upload Cover
+             <el-button type="primary">
+               Upload Cover
+             </el-button>
             </el-upload>
           </el-form-item>
-
         </el-form>
       </div>
       <div style="padding: 20px">
@@ -127,11 +137,28 @@
         </div>
       </template>
     </el-dialog>
+
+
+<!--    view content dialog-->
+    <el-dialog title="" v-model="data.viewContentVisible" width="50%"
+               :close-on-click-modal="false" destroy-on-close>
+      <div class="editor-content-view" style="padding:20px"
+           v-html="data.form.content">
+      </div>
+      <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="data.viewContentVisible = false">CLOSE
+            </el-button>
+          </span>
+      </template>
+    </el-dialog>
+
+
   </div>
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import { computed, nextTick, reactive, ref } from 'vue'
 import request from '@/utils/request.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Edit } from '@element-plus/icons-vue'
@@ -153,15 +180,17 @@ const data = reactive({
   editRow: null,
   formVisible: false,
   form: {
-    name: null,
-    username: null,
-    password: null,
-    role: null,
+    id: null,
+    title: null,
+    description: null,
     content: null,
     img: null,
+    time: null,
+
   },
   selectedRows: [],
   dialogContentVisible:false,
+  viewContentVisible:false,
 })
 
 const formRef = ref(null)
@@ -189,17 +218,21 @@ const reset = () => {
 }
 
 const loadForm = () => {
-  data.dialogContentVisible = true
-  data.form = {}
+  nextTick(() => {
+    data.form.id = null
+    data.form.title = ''
+    data.form.description = ''
+    data.form.content = ''
+    data.form.img = ''
+    data.form.time = null
+    data.dialogContentVisible = true
+  })
 }
 
 const saveArticles = () => {
   data.dialogContentVisible = false
-  formRef.value.validate((valid) => {
-    if (valid) {
-      data.form.id ? updateArticles() : addArticles()
-    }
-  })
+  data.form.id ? updateArticles() : addArticles()
+
 }
 
 const addArticles = () => {
@@ -275,7 +308,9 @@ const deleteSelectedRow = () => {
 i18nChangeLanguage('en')
 
 const editContent = (row) => {
-  data.form = JSON.parse(JSON.stringify(row))
+  nextTick(() => {
+    data.form = JSON.parse(JSON.stringify(row))
+  })
   data.dialogContentVisible = true
 }
 
@@ -307,4 +342,8 @@ const handleContentCreated = (editor) => {
   editorRef.value = editor
 }
 
+const viewContent = (content) => {
+  data.form.content = content
+  data.viewContentVisible = true
+}
 </script>

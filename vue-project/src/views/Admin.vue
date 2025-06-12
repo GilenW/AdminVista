@@ -46,10 +46,7 @@
 
           <el-table-column label="Actions" width="250">
             <template #default="scope">
-              <el-button
-                type="primary"
-                @click="editContent(scope.row)"
-              >Edit Content</el-button>
+
 
               <el-button
                 type="primary"
@@ -82,7 +79,7 @@
     <el-dialog v-model="data.formVisible" title="Admin Information"
                width="500" destroy-on-close>
       <el-form ref="formRef" :rules="data.rules" :model="data.form"
-               style="margin-right: 50px">
+               style="margin-right: 50px" label-position="left">
         <el-form-item label="Name" label-width="80px">
           <el-input v-model="data.form.name" autocomplete="off" />
         </el-form-item>
@@ -101,29 +98,7 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-model="data.dialogContentVisible" title="Edit Content"
-               width="800">
-    <div style="padding: 20px">
-      <div style="border: 1px solid #ccc; width: 100%">
-        <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef"
-                 :mode="mode">
-        </Toolbar>
-        <Editor
-          style="height: 500px; overflow-y: hidden;"
-          v-model="data.form.content"
-          :defaultConfig="editorConfig"
-          :mode="mode"
-          @onCreated="handleContentCreated"
-        />
-      </div>
-    </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="data.dialogContentVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="saveContent"> Confirm </el-button>
-        </div>
-      </template>
-    </el-dialog>
+
   </div>
 </template>
 

@@ -74,7 +74,7 @@
     <el-dialog v-model="data.formVisible" title="Employee Information"
                width="500" destroy-on-close>
       <el-form ref="formRef" :rules="data.rules" :model="data.form"
-               style="margin-right: 50px">
+               style="margin-right: 50px" label-position="left">
         <el-form-item label="Name" label-width="80px">
           <el-input v-model="data.form.name" autocomplete="off" />
         </el-form-item>
