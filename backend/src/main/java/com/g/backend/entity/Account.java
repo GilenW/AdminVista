@@ -7,6 +7,19 @@ public class Account {
     private String password;
     private String role;
     private String newPassword;
+    private String avatar;
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public Integer getId() {
         return id;

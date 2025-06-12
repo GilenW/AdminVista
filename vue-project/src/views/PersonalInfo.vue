@@ -74,12 +74,10 @@ if(data.loginUser.role === 'EMP'){
 }
 
 const handleAvatarSuccess = (res) => {
-  console.log(res.data)
   data.form.avatar = res.data
 }
 
 const updateUser = () =>{
-  console.log(data.form)
   if(data.form.role === 'EMP'){
 
     request.put("/employees/update", data.form).then(res =>{
@@ -92,7 +90,6 @@ const updateUser = () =>{
     })
   }else{
     request.put("/admin/update", data.form).then(res =>{
-      console.log(data.form)
       if(res.code == 200){
         ElMessage.success("Update Successfully!")
       }else{

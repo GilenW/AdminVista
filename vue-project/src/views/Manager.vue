@@ -9,7 +9,11 @@
 
       <div style="flex: 1"></div>
       <div style="width: fit-content; display: flex; align-items: center; padding-right: 10px">
-        <img src="" style="width: 40px; height: 40px" />
+        <img
+          :src="data.loginUser.avatar ||
+          'https://static.thenounproject.com/png/5100711-200.png' "
+          style="width: 40px; height: 40px;
+        border-radius:50%" />
         <span style="color: white; margin-left: 10px">{{data.loginUser
           .name}}</span>
       </div>
