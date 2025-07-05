@@ -3,19 +3,20 @@
     <!--    header-->
     <div class="header" style="height: 60px; display: flex; align-items: center">
       <div style="margin-left: 20px; width: 500px; display: flex; align-items: center">
-        <img src="" style="width: 40px; height: 40px; margin-right: 10px" />
-        <span style="font-size: 20px; color: white"> Management System </span>
+        <img
+          src="https://marketplace.canva.com/ljG0Q/MAFv01ljG0Q/1/tl/canva-dashboard-icon-MAFv01ljG0Q.png"
+          style="width: 40px; height: 40px; margin-right: 10px"
+        />
+        <span style="font-size: 20px; color: white"> AdminVista </span>
       </div>
 
       <div style="flex: 1"></div>
       <div style="width: fit-content; display: flex; align-items: center; padding-right: 10px">
         <img
-          :src="data.loginUser.avatar ||
-          'https://static.thenounproject.com/png/5100711-200.png' "
-          style="width: 40px; height: 40px;
-        border-radius:50%" />
-        <span style="color: white; margin-left: 10px">{{data.loginUser
-          .name}}</span>
+          :src="data.loginUser.avatar || 'https://static.thenounproject.com/png/5100711-200.png'"
+          style="width: 40px; height: 40px; border-radius: 50%"
+        />
+        <span style="color: white; margin-left: 10px">{{ data.loginUser.name }}</span>
       </div>
     </div>
   </div>
@@ -64,7 +65,7 @@
     <!--    left navigation end-->
 
     <!--    right section starts-->
-    <div style="flex: 1; width: 0; background-color: aliceblue; padding: 10px">
+    <div style="flex: 1; width: 0; background-color: var(--dashboard-backg-color); padding: 10px">
       <RouterView @updateUser="updateUser"></RouterView>
     </div>
   </div>
@@ -75,10 +76,12 @@ import router from '@/router/index.js'
 import {
   DataAnalysis,
   Loading,
-  Location, Lock, Notebook,
+  Location,
+  Lock,
+  Notebook,
   SwitchButton,
   User,
-  UserFilled
+  UserFilled,
 } from '@element-plus/icons-vue'
 import request from '@/utils/request.js'
 import { reactive } from 'vue'
@@ -94,7 +97,6 @@ const logout = () => {
 
 const updateUser = () => {
   data.loginUser = JSON.parse(localStorage.getItem('login-user'))
-
 }
 </script>
 

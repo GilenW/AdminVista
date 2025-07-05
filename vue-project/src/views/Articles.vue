@@ -29,36 +29,40 @@
           <el-table-column type="selection" width="80"></el-table-column>
           <el-table-column label="Cover" width="180">
             <template #default="scope">
-              <el-image v-if="scope.row.img" :src="scope.row.img"
-                        :preview-src-list=[scope.row.img]  preview-teleported
-                   style="display:block; width: 100px;
-              height:
-               60px; "> </el-image>
+              <el-image
+                v-if="scope.row.img"
+                :src="scope.row.img"
+                :preview-src-list="[scope.row.img]"
+                preview-teleported
+                style="display: block; width: 100px; height: 60px"
+              >
+              </el-image>
             </template>
           </el-table-column>
           <el-table-column prop="title" label="Title" width="180" />
-          <el-table-column prop="description" label="Description"
-                           width="180" show-overflow-tooltip></el-table-column>
+          <el-table-column
+            prop="description"
+            label="Description"
+            width="180"
+            show-overflow-tooltip
+          ></el-table-column>
 
-<!--          <el-table-column prop="content" label="Content"-->
-<!--                           width="180" show-overflow-tooltip>-->
-<!--            <template #default="scope">-->
-<!--              <div v-html="scope.row.content" style="max-height: 80px; overflow: auto; white-space: normal;"></div>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-          <el-table-column prop="content" label="Content"
-                           width="180" show-overflow-tooltip>
+          <!--          <el-table-column prop="content" label="Content"-->
+          <!--                           width="180" show-overflow-tooltip>-->
+          <!--            <template #default="scope">-->
+          <!--              <div v-html="scope.row.content" style="max-height: 80px; overflow: auto; white-space: normal;"></div>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <el-table-column prop="content" label="Content" width="180" show-overflow-tooltip>
             <template #default="scope">
-              <el-button type="primary"
-                         @click="viewContent(scope.row.content)">SEE
-                CONTENT</el-button>
+              <el-button type="primary" @click="viewContent(scope.row.content)"
+                >SEE CONTENT</el-button
+              >
             </template>
           </el-table-column>
-          <el-table-column prop="time" label="Time"
-                           width="180"></el-table-column>
+          <el-table-column prop="time" label="Time" width="180"></el-table-column>
           <el-table-column label="Actions" width="250">
             <template #default="scope">
-
               <el-button
                 type="primary"
                 @click="editContent(scope.row)"
@@ -87,42 +91,34 @@
       </div>
     </div>
 
-
-    <el-dialog v-model="data.dialogContentVisible" title="Article"
-               width="800">
+    <el-dialog v-model="data.dialogContentVisible" title="Article" width="800">
       <div>
-        <el-form ref="formRef" :model="data.form"
-                 style="margin-right: 50px" label-position="left">
+        <el-form ref="formRef" :model="data.form" style="margin-right: 50px" label-position="left">
           <el-form-item label="Title" label-width="80px">
             <el-input v-model="data.form.title" autocomplete="off" />
           </el-form-item>
 
-          <el-form-item prop="description" label="Description"
-                        label-width="80px">
-            <el-input type="textarea" v-model="data.form.description"
-                      autocomplete="off" />
+          <el-form-item prop="description" label="Description" label-width="80px">
+            <el-input type="textarea" v-model="data.form.description" autocomplete="off" />
           </el-form-item>
 
           <el-form-item label="cover">
             <el-upload
-            action="http://localhost:9090/files/upload"
-            list-type="picture"
-            :on-success="handleCoverSuccess">
-             <el-button type="primary">
-               Upload Cover
-             </el-button>
+              action="http://localhost:9090/files/upload"
+              list-type="picture"
+              :on-success="handleCoverSuccess"
+            >
+              <el-button type="primary"> Upload Cover </el-button>
             </el-upload>
           </el-form-item>
         </el-form>
       </div>
       <div style="padding: 20px">
         <div style="border: 1px solid #ccc; width: 100%">
-
-          <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef"
-                   :mode="mode">
+          <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :mode="mode">
           </Toolbar>
           <Editor
-            style="height: 500px; overflow-y: hidden;"
+            style="height: 500px; overflow-y: hidden"
             v-model="data.form.content"
             :defaultConfig="editorConfig"
             :mode="mode"
@@ -138,22 +134,21 @@
       </template>
     </el-dialog>
 
-
-<!--    view content dialog-->
-    <el-dialog title="" v-model="data.viewContentVisible" width="50%"
-               :close-on-click-modal="false" destroy-on-close>
-      <div class="editor-content-view" style="padding:20px"
-           v-html="data.form.content">
-      </div>
+    <!--    view content dialog-->
+    <el-dialog
+      title=""
+      v-model="data.viewContentVisible"
+      width="50%"
+      :close-on-click-modal="false"
+      destroy-on-close
+    >
+      <div class="editor-content-view" style="padding: 20px" v-html="data.form.content"></div>
       <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="data.viewContentVisible = false">CLOSE
-            </el-button>
-          </span>
+        <span class="dialog-footer">
+          <el-button @click="data.viewContentVisible = false">CLOSE </el-button>
+        </span>
       </template>
     </el-dialog>
-
-
   </div>
 </template>
 
@@ -164,8 +159,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Edit } from '@element-plus/icons-vue'
 
 import '@wangeditor/editor/dist/css/style.css'
-import {onBeforeUnmount, shallowRef} from 'vue'
-import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
+import { onBeforeUnmount, shallowRef } from 'vue'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { i18nChangeLanguage } from '@wangeditor/editor'
 
 const data = reactive({
@@ -186,11 +181,10 @@ const data = reactive({
     content: null,
     img: null,
     time: null,
-
   },
   selectedRows: [],
-  dialogContentVisible:false,
-  viewContentVisible:false,
+  dialogContentVisible: false,
+  viewContentVisible: false,
 })
 
 const formRef = ref(null)
@@ -205,7 +199,6 @@ const loadArticles = () => {
       },
     })
     .then((res) => {
-
       data.tableData = res.data.list
       data.tableProperty.total = res.data.total
     })
@@ -232,7 +225,6 @@ const loadForm = () => {
 const saveArticles = () => {
   data.dialogContentVisible = false
   data.form.id ? updateArticles() : addArticles()
-
 }
 
 const addArticles = () => {
@@ -316,23 +308,22 @@ const editContent = (row) => {
 
 // editor content initialization
 
-const baseURl = "http://localhost:9090"
+const baseURl = 'http://localhost:9090'
 const editorRef = shallowRef(null)
 const mode = 'default'
-const editorConfig = {MENU_CONF:{}}
+const editorConfig = { MENU_CONF: {} }
 editorConfig.MENU_CONF['uploadImage'] = {
-  server:baseURl + '/files/wang/upload',
+  server: baseURl + '/files/wang/upload',
   fileName: 'file',
 }
 
-onBeforeUnmount(()=>{
+onBeforeUnmount(() => {
   const editor = editorRef.value
   if (editor == null) {
     return
   }
   editor.destroy()
 })
-
 
 const handleCoverSuccess = (res) => {
   data.form.img = res.data

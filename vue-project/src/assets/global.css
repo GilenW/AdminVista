@@ -5,8 +5,9 @@
  }
 
  :root{
-   --primary-color: #ae93e5;
-   --buton--active-color: #e3deee;
-   --login-backg-color: #ae93e5;
+   --primary-color: #006A71;
+   --buton--active-color: #48A6A7;
+   --login-backg-color: #9ACBD0;
+   --dashboard-backg-color: #F2EFE7;
  }
 

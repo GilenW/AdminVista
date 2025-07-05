@@ -16,7 +16,6 @@ import Articles from '@/views/Articles.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-
     {
       path: '/',
       redirect: '/login',
@@ -32,7 +31,7 @@ const router = createRouter({
         {
           path: 'home',
           name: 'home',
-          component: TodoList,
+          component: Home,
           meta: {
             title: 'Home Page',
           },
@@ -84,23 +83,21 @@ const router = createRouter({
           meta: {
             title: 'Articles',
           },
-        }
-
-
+        },
       ],
     },
     {
-      path:'/login',
+      path: '/login',
       name: 'Login Page',
-      meta:{
+      meta: {
         title: 'Login Page',
       },
       component: Login,
     },
     {
-      path:'/register',
+      path: '/register',
       name: 'Register Page',
-      meta:{
+      meta: {
         title: 'Register Page',
       },
       component: Register,
